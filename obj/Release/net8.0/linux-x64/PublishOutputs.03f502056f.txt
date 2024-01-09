@@ -1,0 +1,2 @@
+/home/james/code/1brc/bin/Release/net8.0/linux-x64/publish/1brc
+/home/james/code/1brc/bin/Release/net8.0/linux-x64/publish/1brc.pdb

@@ -1,0 +1,17 @@
+/home/james/code/1brc/bin/Release/net7.0/1brc
+/home/james/code/1brc/bin/Release/net7.0/1brc.deps.json
+/home/james/code/1brc/bin/Release/net7.0/1brc.runtimeconfig.json
+/home/james/code/1brc/bin/Release/net7.0/1brc.dll
+/home/james/code/1brc/bin/Release/net7.0/1brc.pdb
+/home/james/code/1brc/bin/Release/net7.0/CsvHelper.dll
+/home/james/code/1brc/obj/Release/net7.0/1brc.csproj.AssemblyReference.cache
+/home/james/code/1brc/obj/Release/net7.0/1brc.GeneratedMSBuildEditorConfig.editorconfig
+/home/james/code/1brc/obj/Release/net7.0/1brc.AssemblyInfoInputs.cache
+/home/james/code/1brc/obj/Release/net7.0/1brc.AssemblyInfo.cs
+/home/james/code/1brc/obj/Release/net7.0/1brc.csproj.CoreCompileInputs.cache
+/home/james/code/1brc/obj/Release/net7.0/1brc.csproj.CopyComplete
+/home/james/code/1brc/obj/Release/net7.0/1brc.dll
+/home/james/code/1brc/obj/Release/net7.0/refint/1brc.dll
+/home/james/code/1brc/obj/Release/net7.0/1brc.pdb
+/home/james/code/1brc/obj/Release/net7.0/1brc.genruntimeconfig.cache
+/home/james/code/1brc/obj/Release/net7.0/ref/1brc.dll
