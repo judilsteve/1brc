@@ -1,6 +1,6 @@
-using System.Globalization;
 using System.Collections.Concurrent;
 using System.IO.MemoryMappedFiles;
+using System.Runtime.CompilerServices;
 
 using var memoryMappedMeasurements = MemoryMappedFile.CreateFromFile("measurements.txt");
 var chunkRanges = new List<(long, long)>();
@@ -26,13 +26,12 @@ Parallel.ForEach(chunkRanges, range => {
     while((line = reader.ReadLine()) is not null) {
         var separatorIndex = line.IndexOf(';');
         var city = line[..separatorIndex];
-        var temp = double.Parse(line.AsSpan(separatorIndex + 1), CultureInfo.InvariantCulture);
+        var temp = Utils.FastParseDouble(line.AsSpan(separatorIndex + 1));
         if (!cities.TryGetValue(city, out var cityStats)) {
-            cityStats = new CityStats(temp);
+            cityStats = new CityStats();
             cities[city] = cityStats;
-        } else {
-            cityStats.AddMeasurement(temp);
         }
+        cityStats.AddMeasurement(temp);
     }
     chunkResults.Add(cities);
 });
@@ -52,19 +51,29 @@ foreach (var (city, stats) in combined.OrderBy(kvp => kvp.Key)) {
     Console.WriteLine($"{city}={stats}");
 }
 
-class CityStats
-{
-    private double min;
-    private double max;
-    private double sum;
-    private int count;
-
-    public CityStats(double firstValue) {
-        min = firstValue;
-        max = firstValue;
-        sum = firstValue;
-        count = 1;
+static class Utils {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static double FastParseDouble(ReadOnlySpan<char> utf8Span) {
+        var isNegative = utf8Span[0] == '-';
+        double value = 0.0;
+        for (int i = isNegative ? 1 : 0; i < utf8Span.Length; i++) {
+            if (utf8Span[i] == '.') continue;
+            value = (value  * 10.0) + (utf8Span[i] - '0');
+        }
+        // The floats are always given with one fractional digit. We use this to our advantage
+        value /= 10.0;
+        if(isNegative) value *= -1;
+        return value;
     }
+}
+
+class CityStats {
+    private double min = double.MaxValue;
+    private double max = double.MinValue;
+    private double sum = 0;
+    private int count = 0;
+
+    public CityStats() {}
 
     public CityStats(CityStats a, CityStats b) {
         min = Math.Min(a.min, b.min);
@@ -73,6 +82,7 @@ class CityStats
         count = a.count + b.count;
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void AddMeasurement(double value)  {
         if (value < min) min = value;
         else if (value > max) max = value;
