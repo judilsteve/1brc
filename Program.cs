@@ -26,7 +26,7 @@ Parallel.ForEach(chunkRanges, range => {
     while((line = reader.ReadLine()) is not null) {
         var separatorIndex = line.IndexOf(';');
         var city = line[..separatorIndex];
-        var temp = Utils.FastParseDouble(line.AsSpan(separatorIndex + 1));
+        var temp = FastParseDouble(line.AsSpan(separatorIndex + 1));
         if (!cities.TryGetValue(city, out var cityStats)) {
             cityStats = new CityStats();
             cities[city] = cityStats;
@@ -51,20 +51,18 @@ foreach (var (city, stats) in combined.OrderBy(kvp => kvp.Key)) {
     Console.WriteLine($"{city}={stats}");
 }
 
-static class Utils {
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static double FastParseDouble(ReadOnlySpan<char> utf8Span) {
-        var isNegative = utf8Span[0] == '-';
-        double value = 0.0;
-        for (int i = isNegative ? 1 : 0; i < utf8Span.Length; i++) {
-            if (utf8Span[i] == '.') continue;
-            value = (value  * 10.0) + (utf8Span[i] - '0');
-        }
-        // The floats are always given with one fractional digit. We use this to our advantage
-        value /= 10.0;
-        if(isNegative) value *= -1;
-        return value;
+[MethodImpl(MethodImplOptions.AggressiveInlining)]
+static double FastParseDouble(ReadOnlySpan<char> utf8Span) {
+    var isNegative = utf8Span[0] == '-';
+    double value = 0.0;
+    for (int i = isNegative ? 1 : 0; i < utf8Span.Length; i++) {
+        if (utf8Span[i] == '.') continue;
+        value = (value  * 10.0) + (utf8Span[i] - '0');
     }
+    // The floats are always given with one fractional digit. We use this to our advantage
+    value /= 10.0;
+    if(isNegative) value *= -1;
+    return value;
 }
 
 class CityStats {
